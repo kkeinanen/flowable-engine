@@ -64,4 +64,4 @@ cd $BASE_PWD
 
 echo "Building Docker image for version: $FLOWABLE_VERSION"
 
-docker build -t flowable/all-in-one:latest -t flowable/all-in-one:$FLOWABLE_VERSION .
+sudo docker build -t flowable/all-in-one:latest -t flowable/all-in-one:$FLOWABLE_VERSION .

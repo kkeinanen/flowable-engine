@@ -1,7 +1,15 @@
 FROM adoptopenjdk/openjdk8:alpine-slim
 ADD wait-for-something.sh .
 
+RUN apk --update add fontconfig ttf-dejavu
+
 RUN addgroup tomcat && adduser -s /bin/false -G tomcat -h /opt/tomcat -D tomcat
+
+# kludge for alpine from https://github.com/AdoptOpenJDK/openjdk-docker/issues/75
+RUN ln -s /usr/lib/libfontconfig.so.1 /usr/lib/libfontconfig.so && \
+    ln -s /lib/libuuid.so.1 /usr/lib/libuuid.so.1 && \
+    ln -s /lib/libc.musl-x86_64.so.1 /usr/lib/libc.musl-x86_64.so.1
+ENV LD_LIBRARY_PATH /usr/lib
 
 RUN wget http://archive.apache.org/dist/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz -O /tmp/tomcat.tar.gz
 RUN cd /tmp && tar xvfz tomcat.tar.gz && cp -Rv /tmp/apache-tomcat-9.0.14/* /opt/tomcat/ && rm -Rf /tmp/apache-tomcat-9.0.14
